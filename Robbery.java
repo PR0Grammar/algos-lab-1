@@ -4,6 +4,9 @@
 
 // You are encouraged to make helper functions!
 
+import java.lang.*;
+import java.util.Arrays; 
+
 public class Robbery {
 
 	// Using DP: Get the maximum value with capacity C and n items
@@ -12,8 +15,27 @@ public class Robbery {
 		int[] sizes,
 		int[] worths
 	) {
-		// fill in here, change the return
+		
+		int[] cache = new int[sizes.length];
+		Arrays.fill(cache, -1);
+		
+		int maxRob = maximizeRobWorthRecur(0, capacity, sizes, worths, cache);
+
+		return maxRob;
+	}
+
+	private int maximizeRobWorthRecur(
+		int i,
+		int capacity, 
+		int[] sizes, 
+		int[] worths, 
+		int[] cache) {
+		if(capacity <= 0 || i >= worths.length)
 			return 0;
+		return Math.max(
+			(maximizeRobWorthRecur(i + 1, capacity - sizes[i], sizes, worths, cache)) + worths[i],
+			(maximizeRobWorthRecur(i + 1, capacity, sizes, worths, cache))
+		);
 	}
 
 	public int maximizeRobWorthBottomUp(
@@ -21,7 +43,6 @@ public class Robbery {
 		int[] sizes,
 		int[] worths
 	) {
-		// fill in here, change the return
 		return 0;
 	}
 
@@ -43,8 +64,8 @@ public class Robbery {
 
 		int maxWorthRecur = r.maximizeRobWorthRecur(bagCapacity, itemSizes, itemWorths);
 		System.out.println("Max worth of the bag: " + maxWorthRecur);
-		int maxWorthBottomUp = r.maximizeRobWorthBottomUp(bagCapacity, itemSizes, itemWorths);
-		System.out.println("Max worth of the bag: " + maxWorthBottomUp);
+		// int maxWorthBottomUp = r.maximizeRobWorthBottomUp(bagCapacity, itemSizes, itemWorths);
+		// System.out.println("Max worth of the bag: " + maxWorthBottomUp);
 
 		// Bonus: Fill in the helper method takeRobInventory that could help you
 		//figure out which items go into the bag that make it max worth. Feel free
